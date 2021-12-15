@@ -55,7 +55,10 @@ export default NextAuth({
         "https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private,user-read-email,streaming,user-read-private,user-library-read,user-library-modify,user-read-playback-state,user-modify-playback-state,user-read-recently-played,user-follow-read",
     }),
   ],
-
+  secret: process.env.JWT_SECRET,
+  pages: {
+    signIn: "/signin",
+  },
   callbacks: {
     async jwt({ token, user, account }) {
       // Initial sign in
@@ -76,6 +79,7 @@ export default NextAuth({
       // Access token has expired, try to update it
       return refreshAccessToken(token);
     },
+
     async session({ session, token }) {
       session.user = token.user;
       session.accessToken = token.accessToken;
